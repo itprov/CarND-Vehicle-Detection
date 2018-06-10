@@ -8,7 +8,7 @@
 The goals / steps of this project are the following:
 
 * Perform a Histogram of Oriented Gradients (HOG) feature extraction on a labeled training set of images and train a classifier Linear SVM classifier
-* Optionally, you can also apply a color transform and append binned color features, as well as histograms of color, to your HOG feature vector. 
+* Optionally, you can also apply a color transform and append binned color features, as well as histograms of color, to your HOG feature vector.
 * Note: for those first two steps don't forget to normalize your features and randomize a selection for training and testing.
 * Implement a sliding-window technique and use your trained classifier to search for vehicles in images.
 * Run your pipeline on a video stream (start with the test_video.mp4 and later implement on full project_video.mp4) and create a heat map of recurring detections frame by frame to reject outliers and follow detected vehicles.
@@ -55,6 +55,20 @@ Here is an example using the `YCrCb` color space and HOG parameters of `orientat
 
 I tried various combinations of parameters and...
 
+| Color Space | Orientations | Pix / cell | Cells / block | HOG channels |
+|:-----------:|:------------:|:----------:|:-------------:|:------------:|
+|     RGB     |       9      |      8     |       2       | All, 0, 1, 2 |  
+|     HSV     |       9      |      8     |       2       | All, 0, 1, 2 |
+|    YCrCb    |       9      |      8     |       2       | All, 0, 1, 2 |
+|     LUV     |       9      |      8     |       2       | All, 0, 1, 2 |
+|     HLS     |       9      |      8     |       2       | All, 0, 1, 2 |
+|     HLS     |       9      |      4     |       2       | All, 0, 1, 2 |
+|     HLS     |       9      |      8     |       4       | All, 0, 1, 2 |
+|     HLS     |       9      |      4     |       4       | All, 0, 1, 2 |
+|     HLS     |       9      |      8     |       8       | All, 0, 1, 2 |
+|     HLS     |       9      |      4     |       8       | All, 0, 1, 2 |
+
+
 #### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
 I trained a linear SVM using...
@@ -72,6 +86,15 @@ I decided to search random window positions at random scales all over the image 
 Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
 
 ![alt text][image4]
+
+| Channels | Orient. | Pix/cell | Cells/blk | Spat.size | Hist.bins | Train time | Test Acc |
+|:--------:|:-------:|:--------:|:---------:|:---------:|:---------:|:----------:|:---------|
+|     L    |    9    |    8     |     2     |   16x16   |    16     |   6.01s    |  98.73%  |
+|     L    |    9    |    4     |     2     |   16x16   |    16     |  11.55s    |  98.28%  |
+|    HLS   |    9    |    8     |     2     |   16x16   |    16     |   2.97s    |  98.79%  |
+|     Y    |    9    |    8     |     2     |   16x16   |    16     |   5.64s    |  98.45%  |
+|   YCrCb  |    9    |    8     |     2     |   16x16   |    16     |   2.56s    |  99.21%  |
+|   YCrCb  |    9    |    8     |     2     |   32x32   |    16     |  20.59s    |  99.41%  |
 ---
 
 ### Video Implementation
@@ -105,4 +128,3 @@ Here's an example result showing the heatmap from a series of frames of video, t
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
 Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
-
