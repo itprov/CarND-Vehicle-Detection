@@ -18,7 +18,7 @@ The goals / steps of this project are the following:
 [image1]: ./output_images/vehicle_non_vehicle.png
 [image2]: ./output_images/hls_vehicle_hog.png
 [image3]: ./output_images/pipeline_detection.png
-[image4]: ./output_images/pipeline_detection2.jpg
+[image4]: ./output_images/pipeline_detection2.png
 [video1]: ./output_videos/project_video.mp4
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points
