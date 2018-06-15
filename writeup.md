@@ -98,14 +98,14 @@ I also tried non-linear SVC(), more sophisticated scaling using QuantileTransfor
 #### 1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
 See code cells 15-16. I use the logic from the FAQ video and tweaked it a little. The function `draw_boxes()` draws boxes on given image using given box boundaries. The function `draw_labeled_bboxes()` is used to draw boxes using labeled heatmaps. The function `find_vehicle_boxes()` uses the given `y_start_stop` boundaries to crop the image, scale it using the given `scale`, and slides a window of size 64x64 with the provided `overlap` value. As smaller vehicles are likely to be found farther from the bottom (near the top portion of the cropped image), I adjust the `y_stop` value accordingly. I extract the same pipeline of spatial bin, histogram, and HOG features as the one used during training, with the same classifier to predict vehicle positions, and generate bounding boxes based on that. For each positive prediction, a heatmap is incremented for the pixels within the bounding box.
-I tried various combinations of scales and overlap values and found that scales = [1.5, 2, 2.5] and overlap = 75% give the best results (visually) for the set of test images.
+I tried various combinations of scales and overlap values and found that scales = [1.25, 1.5, 2.5] and overlap = 75% give reasonably good results (visually) for the set of test images. However, each combination results into some false positives and some false negatives. I experimented with thresholding and various scale values to eliminate as many false negatives / false positives as possible.
 
 ![alt text][image3]
 
 #### 2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
 As mentioned above, I experimented with many different combinations of color spaces, channels, and HOG, spatial bin parameters until I found the combination that consistently performs better than others.
-Ultimately I searched on 3 scales - 1, 1.5, 2.5 using YCrCb 3-channel HOG features plus spatially binned color and Y-channel color histograms in the feature vector, which provided a nice result. The classifier accuracy with this combination is always above 99%.
+Ultimately I searched on 3 scales - 1.25, 1.5, 2.5 using YCrCb 3-channel HOG features plus spatially binned color and Y-channel color histograms in the feature vector, which provided a nice result. The classifier accuracy with this combination is always above 99%.
 Here is another example image:
 
 ![alt text][image4]
@@ -134,4 +134,4 @@ Here I'll talk about the approach I took, what techniques I used, what worked an
 
 A problem I saw was there was always a trade-off between test dataset accuracy and the speed of training as well as predicting accurate bounding boxes. I added several code improvements such as adjusting the cropped image size based on the scale, using only 1 channel for histogram, etc. to reduce the size of the feature vector.
 
-The other problem is the trade-off betweenoverlap, multiple scale values and detection speed: higher overlap & many different values of scale ensures better vehicle detection, but at the cost of the speed of detection.
+The other problem is the trade-off between overlap, multiple scale values and detection speed: higher overlap & many different values of scale ensures better vehicle detection, but at the cost of the speed of detection.
