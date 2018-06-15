@@ -105,7 +105,7 @@ I tried various combinations of scales and overlap values and found that scales 
 #### 2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
 As mentioned above, I experimented with many different combinations of color spaces, channels, and HOG, spatial bin parameters until I found the combination that consistently performs better than others.
-Ultimately I searched on 3 scales - 1.5, 2, 2.5 using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result. The classifier accuracy with this combination is always above 99.1%.
+Ultimately I searched on 3 scales - 1, 1.5, 2.5 using YCrCb 3-channel HOG features plus spatially binned color and Y-channel color histograms in the feature vector, which provided a nice result. The classifier accuracy with this combination is always above 99%.
 Here is another example image:
 
 ![alt text][image4]
@@ -132,10 +132,6 @@ I recorded the bounding boxes of positive detections in each frame of the video.
 
 Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
 
-The major problem I saw was there was always a trade-off between accuracy and the speed of training as well as predicting accurate bounding boxes. I added several code improvements such as adjusting the cropped image size based on the scale, using only 1 channel for histogram, etc. to reduce the size of the feature vector. However, more improvement is possible.
+A problem I saw was there was always a trade-off between test dataset accuracy and the speed of training as well as predicting accurate bounding boxes. I added several code improvements such as adjusting the cropped image size based on the scale, using only 1 channel for histogram, etc. to reduce the size of the feature vector.
 
-The other problem is the trade-off between reducing false positives using heatmap thresholding and losing true positives due to high threshold value. The pipeline is likely to fail in some cases where it falsely detects portions of trees and road as vehicles, but increasing threshold value results in removal of smaller cars whose heatmap heat is less compared to other, bigger cars.
-
-High overlap / many different values of scale ensures better vehicle detection, but at the cost of the speed of detection.
-
-More experimentation with various color space, channel, scale, overlap, and threshold values is needed to make the piepline more robust. Also, adding specific samples - portions of video frames that are causing false positives - to the training dataset as non-vehicles will help in reducing false positives.
+The other problem is the trade-off betweenoverlap, multiple scale values and detection speed: higher overlap & many different values of scale ensures better vehicle detection, but at the cost of the speed of detection.
